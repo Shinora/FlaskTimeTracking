@@ -1,0 +1,85 @@
+<head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href='/static/style.css' />
+  </head>
+  
+<body>
+    <h1>{{ title }}</h1>
+    <div class="chart-container">
+        <canvas id="myChart" width="200" height="200"></canvas>
+    </div>
+
+    <script>
+
+        const labels = [ {% for label in labels %} '{{label}}', {% endfor %}];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Mon temps',
+                backgroundColor: ['rgb(234, 228, 233)', 'rgb(255, 241, 230)','rgb(253, 226, 228)',
+                'rgb(250, 210, 225)', 'rgb(226, 236, 233)','rgb(190, 225, 230)',
+                'rgb(240, 239, 235)', 'rgb(223, 231, 253)','rgb(205, 218, 253)'],
+                borderColor: 'rgb(255, 255, 255)',
+                data: [{% for value in values %} {{value}}, {% endfor %}],
+                hoverOffset: 8,
+                cutout: '10%'
+            }]
+        };
+
+        const config = {
+            type: 'pie',
+            data: data,
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: 'rgb(0, 0, 0)'
+                        },
+                        position: 'top'
+                    }
+                },
+                layout: {
+                    padding: {
+                        left: 200,
+                        right: 200
+                    }
+                }
+
+            }
+        };
+      
+        const myChart = new Chart(document.getElementById('myChart'),config);
+    </script>
+    
+      <!--<canvas id="chart" width="600" height="400"></canvas>
+      <script>
+        var pieData = [
+          {% for item, label, colors in set %}
+            {
+              value: {{item}},
+              label: "{{label}}",
+              color : "{{colors}}"
+            },
+          {% endfor %}
+        ];
+  
+        // get bar chart canvas
+        var mychart = document.getElementById("chart").getContext("2d");
+        steps = 10
+        // draw pie chart
+        new Chart(document.getElementById("chart").getContext("2d")).Pie(pieData);
+  
+      </script>-->
+      
+
+    <form method="post" action="/time">
+        <input type="submit" value="Day" name="day"/>
+        <input type="submit" value="Week" name="week" />
+        <input type="submit" value="Month" name="month"/>
+    </form>
+  </body>
+  </html>

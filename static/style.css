@@ -6,6 +6,7 @@ body {
 
 h1 {
     font-family:Verdana, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
 }
 
 p {
