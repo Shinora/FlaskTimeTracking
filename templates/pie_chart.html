@@ -9,7 +9,7 @@
     <h1>{{ title }}</h1>
     <div class="chart-container">
         <canvas id="myChart" width="200" height="200"></canvas>
-    </div>
+    
 
     <script>
 
@@ -47,7 +47,8 @@
                         left: 200,
                         right: 200
                     }
-                }
+                },
+                maintainAspectRation: false,
 
             }
         };
@@ -55,31 +56,12 @@
         const myChart = new Chart(document.getElementById('myChart'),config);
     </script>
     
-      <!--<canvas id="chart" width="600" height="400"></canvas>
-      <script>
-        var pieData = [
-          {% for item, label, colors in set %}
-            {
-              value: {{item}},
-              label: "{{label}}",
-              color : "{{colors}}"
-            },
-          {% endfor %}
-        ];
-  
-        // get bar chart canvas
-        var mychart = document.getElementById("chart").getContext("2d");
-        steps = 10
-        // draw pie chart
-        new Chart(document.getElementById("chart").getContext("2d")).Pie(pieData);
-  
-      </script>-->
       
-
     <form method="post" action="/time">
-        <input type="submit" value="Day" name="day"/>
-        <input type="submit" value="Week" name="week" />
-        <input type="submit" value="Month" name="month"/>
+        <input class="button" type="submit" value="Day" name="day"/>
+        <input class="button" type="submit" value="Week" name="week" />
+        <input class="button" type="submit" value="Month" name="month"/>
     </form>
+</div>
   </body>
   </html>
