@@ -10,10 +10,8 @@ def extract_data_time_file(filename):
     data = pd.read_csv(filename)
     # reading the CSV file
     # displaying the contents of the CSV file
-    print(data)
     rows = data.to_numpy()
     for line in rows:
-        print(line[0], " ", line[1], " ", line[2])
         duration = datetime.strptime(line[1], date_format)-datetime.strptime(line[0], date_format)
         activity = line[2]
         if activity in activities:
@@ -35,23 +33,24 @@ def max_prev_days():
     while True:
         f = (date.today()-timedelta(days=x)).isoformat()
         filename = str(f)+".csv"
-        path = "data/"+str(filename)
+        path = "data/time/"+str(filename)
         if file_exist(path) != True:
             return x
         x+=1
-def is_data_today():
-    today = date.today()
-    f = today.isoformat()
+
+def is_data_day(day):
+    f = day
     filename = str(f)+".csv"
-    path = "data/"+str(filename)
+    path = "data/time/"+str(filename)
     return file_exist(path)
 
 def daily_data(date):
-    activities, times = extract_data_time_file("data/"+str(date)+".csv")
+    activities, times = extract_data_time_file("data/time/"+str(date)+".csv")
     return activities, times
 
 def today_data():
-    if is_data_today():
+    today = date.today()
+    if is_data_day(today):
         activities, times = daily_data(date.today())
         return activities, times
     else:
@@ -60,15 +59,14 @@ def today_data():
 def weekly_data():
     total_activities = []
     total_times = []
-    start = 0
-    if is_data_today() == False:
-        start=1
-    if max_prev_days() > 6:
-        days = [(date.today()-timedelta(days=x)).isoformat() for x in range(start, 6)]
-    else:
-        days = [(date.today()-timedelta(days=x)).isoformat() for x in range(start, max_prev_days())]
+    valid_days = []
 
+    days = [(date.today()-timedelta(days=x)).isoformat() for x in range(0, 6)]
     for day in days:
+        if is_data_day(day):
+            valid_days.append(day)
+
+    for day in valid_days:
         activities, times = daily_data(day)
         for activity in activities:
             idx2 = activities.index(activity)
@@ -84,15 +82,13 @@ def weekly_data():
 def monthly_data():
     total_activities = []
     total_times = []
-    start = 0
-    if is_data_today() == False:
-        start=1
-    if max_prev_days() > 30:
-        days = [(date.today()-timedelta(days=x)).isoformat() for x in range(start, 30)]
-    else:
-        days = [(date.today()-timedelta(days=x)).isoformat() for x in range(start, max_prev_days())]
-    
+    valid_days = []
+    days = [(date.today()-timedelta(days=x)).isoformat() for x in range(0, 30)]
     for day in days:
+        if is_data_day(day):
+            valid_days.append(day)
+
+    for day in valid_days:
         activities, times = daily_data(day)
         for activity in activities:
             idx2 = activities.index(activity)
@@ -108,16 +104,14 @@ def monthly_data():
 def last_days_data(nb_days):
     total_activities = []
     total_times = []
-    start = 0
-    if is_data_today() == False:
-        start=1
-    if max_prev_days() > nb_days:
-        days = [(date.today()-timedelta(days=x)).isoformat() for x in range(start, nb_days)]
-    
-    else:
-        days = [(date.today()-timedelta(days=x)).isoformat() for x in range(start, max_prev_days())]
-    
+    valid_days = []
+
+    days = [(date.today()-timedelta(days=x)).isoformat() for x in range(0, nb_days)]
     for day in days:
+        if is_data_day(day):
+            valid_days.append(day)
+
+    for day in valid_days:
         activities, times = daily_data(day)
         for activity in activities:
             idx2 = activities.index(activity)
@@ -129,3 +123,37 @@ def last_days_data(nb_days):
                 total_times.append(times[idx2])
     
     return activities, times
+
+
+def weekly_data_activity(acitivity_code):
+    days = [(date.today()-timedelta(days=x)).isoformat() for x in range(0, 6)]
+    days = days[::-1]
+    day_time = []
+    for day in days:
+        if not is_data_day(day):
+            day_time.append(0)
+        else:
+            activities, times = daily_data(day)
+            for activity in activities:
+                if activity == acitivity_code:
+                    idx = activities.index(activity)
+                    day_time.append(times[idx])
+    
+    return days, day_time
+
+
+def monthly_data_activity(acitivity_code):
+    days = [(date.today()-timedelta(days=x)).isoformat() for x in range(0, 30)]
+    days = days[::-1]
+    day_time = []
+    for day in days:
+        if not is_data_day(day):
+            day_time.append(0)
+        else:
+            activities, times = daily_data(day)
+            for activity in activities:
+                if activity == acitivity_code:
+                    idx = activities.index(activity)
+                    day_time.append(times[idx])
+    
+    return days, day_time

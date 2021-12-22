@@ -1,0 +1,46 @@
+<head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href='/static/style.css' />
+  </head>
+  
+<body>
+    <h1>{{ title }}</h1>
+    <div class="chart-container">
+        <canvas id="myChart" width="200" height="200"></canvas>
+    
+
+    <script>
+
+        const labels = [ {% for label in labels %} '{{label}}', {% endfor %}];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Mon temps',
+                data: [{% for value in values %} {{value}}, {% endfor %}],
+                fill: true,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {},
+
+        };
+      
+        const myChart = new Chart(document.getElementById('myChart'),config);
+    </script>
+    
+      
+    <form method="post" action="{{ url_for('data_activity', activity='{{ activity }}') }}">
+        <input class="button" type="submit" value="Week" name="week" />
+        <input class="button" type="submit" value="Month" name="month"/>
+    </form>
+</div>
+  </body>
+  </html>
