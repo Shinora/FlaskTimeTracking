@@ -8,7 +8,7 @@ import os
 
 
 
-TIME_UPLOAD_FOLDER = "home/pi/Time/FlaskTimeTracking/data/time"
+TIME_UPLOAD_FOLDER = "/home/pi/Time/FlaskTimeTracking/data/time"
 ALLOWED_EXTENSIONS = {"csv", "txt"}
 
 app = Flask(__name__)
